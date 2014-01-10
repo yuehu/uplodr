@@ -1,3 +1,9 @@
+/**
+ * Uplodr
+ *
+ * Uploading and target at iFrame.
+ *
+ */
 var events = require('event');
 var emitter = require('emitter');
 
@@ -7,6 +13,8 @@ function Uplodr(options) {
   var me = this;
 
   options = options || {};
+  options.name = options.name || 'file';
+
   me.options = options;
 
   var name = 'uplodr-iframe-' + parseInt(Math.random() * 10000, 10);
@@ -28,7 +36,8 @@ function Uplodr(options) {
   me.form = form;
 
   var input = createElement('input', {
-    name: options.name || 'file',
+    name: options.name,
+    hidefocus: true,
     type: 'file',
   });
   if (options.accept) {
@@ -54,23 +63,44 @@ function Uplodr(options) {
 }
 emitter(Uplodr.prototype);
 
+/**
+ * Insert form and iframe to document body.
+ */
 Uplodr.prototype.insert = function() {
   document.body.appendChild(this.target);
   document.body.appendChild(this.form);
   this._inserted = true;
 };
 
+/**
+ * Trigger to select file.
+ */
 Uplodr.prototype.select = function() {
   if (!this._inserted) {
     this.insert();
   }
-  this.selector.value = '';
   this.selector.click();
 };
 
+/**
+ * Submit with extra data.
+ */
 Uplodr.prototype.submit = function(data) {
-  var me = this;
-  var form = me.form.cloneNode();
+  var name = this.options.name;
+  var form = this.form;
+  var children = form.childNodes;
+
+  // clean extra data
+  if (children.length > 1) {
+    for (var i = 0; i < children.length; i++) {
+      (function(input) {
+        if (input.name !== name) {
+          form.removeChild(input);
+        }
+      })(children[i]);
+    }
+  }
+
   data = data || {};
   for (var key in data) {
     form.appendChild(createElement('input', {
@@ -81,6 +111,13 @@ Uplodr.prototype.submit = function(data) {
   form.submit();
 };
 
+Uplodr.prototype.takeover = function(el) {
+  var me = this;
+  events.bind(el, 'click', function(e) {
+    e.preventDefault();
+    me.select();
+  });
+};
 
 function createElement(tag, options) {
   options = options || {};

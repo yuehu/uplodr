@@ -8,18 +8,16 @@
   <a id="trigger" href="#">Click</a>
   <script src="build/build.js"></script>
   <script>
-    var Up = require('uplodr');
-    var s = new Up();
-    var trigger = document.getElementById('trigger');
+    var Uplodr = require('uplodr');
+    var s = new Uplodr();
+    var count = 0;
     s.on('select', function(e) {
-      s.submit({'foo': 'bar'});
+      s.submit({'foo': count++});
     });
     s.on('success', function(data) {
       console.log(JSON.parse(data));
     });
-    trigger.onclick = function() {
-      s.select();
-    }
+    s.takeover(document.getElementById('trigger'));
   </script>
 </body>
 </html>

@@ -104,6 +104,7 @@ Uplodr.prototype.submit = function(data) {
   data = data || {};
   for (var key in data) {
     form.appendChild(createElement('input', {
+      type: 'hidden',
       name: key,
       value: data[key]
     }));

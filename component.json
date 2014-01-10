@@ -4,7 +4,10 @@
   "description": "Uploading and target at iFrame.",
   "version": "0.0.1",
   "keywords": [],
-  "dependencies": {},
+  "dependencies": {
+    "component/event": "*",
+    "component/emitter": "*"
+  },
   "development": {},
   "license": "MIT",
   "main": "index.js",

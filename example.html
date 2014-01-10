@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Uplodr</title>
+</head>
+<body>
+  <a id="trigger" href="#">Click</a>
+  <script src="build/build.js"></script>
+  <script>
+    var Up = require('uplodr');
+    var s = new Up();
+    var trigger = document.getElementById('trigger');
+    s.on('select', function(e) {
+      s.submit({'foo': 'bar'});
+    });
+    s.on('success', function(data) {
+      console.log(JSON.parse(data));
+    });
+    trigger.onclick = function() {
+      s.select();
+    }
+  </script>
+</body>
+</html>

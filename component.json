@@ -1,0 +1,14 @@
+{
+  "name": "uplodr",
+  "repo": "yuehu/uplodr",
+  "description": "Uploading and target at iFrame.",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {},
+  "development": {},
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ]
+}

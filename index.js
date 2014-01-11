@@ -83,22 +83,26 @@ Uplodr.prototype.select = function() {
 };
 
 /**
- * Submit with extra data.
+ * Reset with extra data.
  */
-Uplodr.prototype.submit = function(data) {
+Uplodr.prototype.reset = function(data) {
   var name = this.options.name;
   var form = this.form;
   var children = form.childNodes;
+  var nodelist = [];
 
-  // clean extra data
   if (children.length > 1) {
     for (var i = 0; i < children.length; i++) {
       (function(input) {
         if (input.name !== name) {
-          form.removeChild(input);
+          nodelist.push(input);
         }
       })(children[i]);
     }
+  }
+
+  while (nodelist.length) {
+    form.removeChild(nodelist.pop());
   }
 
   data = data || {};
@@ -109,7 +113,14 @@ Uplodr.prototype.submit = function(data) {
       value: data[key]
     }));
   }
-  form.submit();
+};
+
+/**
+ * Submit with extra data.
+ */
+Uplodr.prototype.submit = function(data) {
+  this.reset(data);
+  this.form.submit();
 };
 
 Uplodr.prototype.takeover = function(el) {

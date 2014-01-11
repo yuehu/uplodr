@@ -83,9 +83,9 @@ Uplodr.prototype.select = function() {
 };
 
 /**
- * Reset with extra data.
+ * Reset the form, clean extra inputs.
  */
-Uplodr.prototype.reset = function(data) {
+Uplodr.prototype.reset = function() {
   var name = this.options.name;
   var form = this.form;
   var children = form.childNodes;
@@ -95,6 +95,8 @@ Uplodr.prototype.reset = function(data) {
     for (var i = 0; i < children.length; i++) {
       (function(input) {
         if (input.name !== name) {
+          // form.childNodes is a reference
+          // we can't just removeChild here
           nodelist.push(input);
         }
       })(children[i]);
@@ -104,6 +106,14 @@ Uplodr.prototype.reset = function(data) {
   while (nodelist.length) {
     form.removeChild(nodelist.pop());
   }
+};
+
+/**
+ * Submit with extra data.
+ */
+Uplodr.prototype.submit = function(data) {
+  this.reset();
+  var form = this.form;
 
   data = data || {};
   for (var key in data) {
@@ -113,14 +123,7 @@ Uplodr.prototype.reset = function(data) {
       value: data[key]
     }));
   }
-};
-
-/**
- * Submit with extra data.
- */
-Uplodr.prototype.submit = function(data) {
-  this.reset(data);
-  this.form.submit();
+  form.submit();
 };
 
 Uplodr.prototype.takeover = function(el) {

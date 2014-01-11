@@ -1,7 +1,7 @@
 
 # uplodr
 
-Uploading and target at iFrame.
+Uploading and target at iframe.
 
 ## Installation
 
@@ -25,6 +25,10 @@ var uploader = new Uplodr(options);
 ### .select()
 
 Trigger to prompt default select dialog.
+
+### .reset()
+
+Clean up extra data in the form.
 
 ### .submit(data)
 

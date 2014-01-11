@@ -1,8 +1,8 @@
 {
   "name": "uplodr",
   "repo": "yuehu/uplodr",
-  "description": "Uploading and target at iFrame.",
-  "version": "0.1.0",
+  "description": "Uploading and target at iframe.",
+  "version": "0.1.1",
   "keywords": [
     "upload",
     "file"

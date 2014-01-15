@@ -6,6 +6,8 @@
  */
 var events = require('event');
 var emitter = require('emitter');
+var offset = require('offset');
+var isIE = /msie/.test(navigator.userAgent.toLowerCase());
 
 module.exports = Uplodr;
 
@@ -48,16 +50,25 @@ function Uplodr(options) {
   }
   form.appendChild(input);
 
-  me.selector = input;
-  me._inserted = false;
+  me.input = input;
 
-  events.bind(input, 'change', function(e) {
-    me.emit('select', e, input);
-  });
+  if (isIE) {
+    events.bind(input, 'click', function(e) {
+      setTimeout(function() {
+        me.emit('select', e, input);
+      }, 1);
+    });
+  } else {
+    events.bind(input, 'change', function(e) {
+      me.emit('select', e, input);
+    });
+  }
   events.bind(iframe, 'load', function(e) {
     if (me._inserted) {
       var ret = iframe.contentDocument.body.textContent;
-      me.emit('success', ret);
+      if (ret) {
+        me.emit('success', ret);
+      }
     }
   });
 }
@@ -76,10 +87,8 @@ Uplodr.prototype.insert = function() {
  * Trigger to select file.
  */
 Uplodr.prototype.select = function() {
-  if (!this._inserted) {
-    this.insert();
-  }
-  this.selector.click();
+  if (!this._inserted) this.insert();
+  if (!this._takeover) this.input.click();
 };
 
 /**
@@ -128,10 +137,31 @@ Uplodr.prototype.submit = function(data) {
 
 Uplodr.prototype.takeover = function(el) {
   var me = this;
-  events.bind(el, 'click', function(e) {
-    e.preventDefault();
-    me.select();
-  });
+  if (!me._inserted) me.insert();
+
+  var o = offset(el);
+  var inputStyle = {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    opacity: 0,
+    cursor: 'pointer',
+    height: el.offsetHeight + 'px',
+    fontSize: Math.max(64, el.offsetHeight * 5) + 'px'
+  };
+  var formStyle = {
+    display: 'block',
+    position: 'absolute',
+    top: o.y + 'px',
+    left: o.x + 'px',
+    overflow: 'hidden',
+    width: el.offsetWidth + 'px',
+    height: el.offsetHeight + 'px',
+    zIndex: findzIndex(el) + 10
+  };
+  stylish(me.input, inputStyle);
+  stylish(me.form, formStyle);
+  me._takeover = true;
 };
 
 function createElement(tag, options) {
@@ -141,4 +171,19 @@ function createElement(tag, options) {
     el.setAttribute(key, options[key]);
   }
   return el;
+}
+
+function findzIndex(el) {
+  var zIndex = el.style.zIndex;
+  while (el && el !== document.body) {
+    el = el.parentNode;
+    zIndex = parseInt(el.style.zIndex, 10) || zIndex;
+  }
+  return zIndex || 0;
+}
+
+function stylish(el, css) {
+  for (var key in css) {
+    el.style[key] = css[key];
+  }
 }

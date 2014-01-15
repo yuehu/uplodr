@@ -9,7 +9,8 @@
   ],
   "dependencies": {
     "component/event": "*",
-    "component/emitter": "*"
+    "component/emitter": "*",
+    "tomerdmnt/offset": "*"
   },
   "development": {},
   "license": "MIT",

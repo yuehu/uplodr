@@ -15,7 +15,7 @@
       s.submit({'foo': count++});
     });
     s.on('success', function(data) {
-      console.log(JSON.parse(data));
+      alert(data);
     });
     s.takeover(document.getElementById('trigger'));
   </script>

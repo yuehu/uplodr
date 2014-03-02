@@ -10,7 +10,7 @@
   "dependencies": {
     "component/event": "*",
     "component/emitter": "*",
-    "tomerdmnt/offset": "*"
+    "timoxley/offset": "*"
   },
   "development": {},
   "license": "MIT",

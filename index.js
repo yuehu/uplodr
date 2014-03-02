@@ -152,8 +152,8 @@ Uplodr.prototype.takeover = function(el) {
   var formStyle = {
     display: 'block',
     position: 'absolute',
-    top: o.y + 'px',
-    left: o.x + 'px',
+    top: o.top + 'px',
+    left: o.left + 'px',
     overflow: 'hidden',
     width: el.offsetWidth + 'px',
     height: el.offsetHeight + 'px',

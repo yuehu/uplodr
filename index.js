@@ -65,9 +65,10 @@ function Uplodr(options) {
   }
   events.bind(iframe, 'load', function(e) {
     if (me._inserted) {
-      var ret = iframe.contentDocument.body.textContent;
-      if (ret) {
-        me.emit('success', ret);
+      var ret = iframe.contentDocument.body;
+      var text = ret.textContent || ret.innerText;
+      if (text) {
+        me.emit('success', text);
       }
     }
   });
